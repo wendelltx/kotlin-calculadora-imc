@@ -1,12 +1,12 @@
 ## Calculadora de IMC - LPDM Avaliação 2
 
 ## 1. Descrição
-O aplicativo calcula o Índice de Massa Corporal (IMC) a partir de dados digitados pelo usuário, exibindo o resultado e uma classificação.
+O aplicativo calcula o Índice de Massa Corporal (IMC) a partir de dados digitados pelo usuário, exibindo o resultado e uma classificação de acordo com a tabela de IMC.
 
 ## 2. Tecnologias Utilizadas
 - **Linguagem:** Kotlin
-- **UI Framework:** Jetpack Compose (Material3)
-- **IDE:** Android Studio Ladybug (ou versão atual utilizada)
+- **UI Framework:** Jetpack Compose 
+- **IDE:** Android Studio Ladybug 
 - **Gerenciador de Dependências:** Gradle (Kotlin DSL com Version Catalog)
 - **Mínimo SDK:** 24 (Android 7.0)
 - **Target SDK:** 36
@@ -18,11 +18,11 @@ O aplicativo calcula o Índice de Massa Corporal (IMC) a partir de dados digitad
 
 1. **Clonar o Repositório:**
    ```bash
-   git clone https://github.com/<SEU_USUARIO>/LPDM-avaliacao-1.git
+   git clone https://github.com/wendelltx/kotlin-calculadora-imc.git
    ```
 2. **Abrir no Android Studio:**
    - Abra o Android Studio.
-   - Clique em `File > Open...` e selecione a pasta do projeto clonado (`LPDM-avaliacao-1`).
+   - Clique em `File > Open...` e selecione a pasta do projeto clonado (`kotlin-calculadora-imc`).
    - Aguarde o término do processo de sincronização do Gradle (*Gradle Sync*).
 
 
