@@ -96,11 +96,11 @@ fun TipTimeLayout() {
         )
         Button(
             onClick = {
-                gorjeta = calcularImc(pesoKg,alturaInput, arredondarResultado)
+                imc = calcularImc(pesoKg,alturaInput, arredondarResultado)
             },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
         ) { Text("Calcular") }
-        Text(text = "Gorjeta: $gorjeta", fontSize = 20.sp)
+        Text(text = "IMC: $imc", fontSize = 20.sp)
     }
 }
 
@@ -160,7 +160,7 @@ fun ExibirImc(imc: Double) {
         )
 }
     fun FaixaIMC(n: Double):String = when(n) {
-        <18.5 -> "Abaixo do peso"; >18.5 && <24.9 -> "Peso normal"; >25.0 && <29.9 -> "Sobrepeso"; >30.0 -> "Obesidade"; else->"?"
+        n<18.5 -> "Abaixo do peso"; n>18.5 && <24.9 -> "Peso normal"; n>25.0 && <29.9 -> "Sobrepeso"; n>30.0 -> "Obesidade"; else->"?"
     }
 
 fun calcularImc(
@@ -170,6 +170,6 @@ fun calcularImc(
 ): String {
     var imc = (pesoKg / alturaM * alturaM)
     if (arredondar) imc = ceil(imc)
-    return NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(gorjeta)
+    return NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(imc)
 }
 
