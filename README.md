@@ -1,4 +1,4 @@
-##Calculadora de IMC - LPDM Avaliação 2
+## Calculadora de IMC - LPDM Avaliação 2
 
 ## 1. Descrição
 O aplicativo calcula o Índice de Massa Corporal (IMC) a partir de dados digitados pelo usuário, exibindo o resultado e uma classificação.
