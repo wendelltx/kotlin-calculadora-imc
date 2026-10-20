@@ -38,9 +38,11 @@ O aplicativo calcula o Índice de Massa Corporal (IMC) a partir de dados digitad
 ## 4. Estrutura de Arquivos e Composables
 
 ### `MainActivity.kt`
-- **`MainActivity`**: Activity principal do aplicativo responsável por inicializar o conteúdo com o tema da aplicação (`LPDMavaliacao1Theme`) e definir o container base com `Scaffold`.
-- **`CardPerfil`**: Função composable principal da tela. Organiza o layout em camadas utilizando `Box`, insere a foto de perfil, frase em destaque, nome, cargo, resumo profissional e a lista de contatos.
-- **`ItemContato`**: Composable reutilizável criada para padronizar e renderizar cada linha de contato (ícone do Material Icons e texto correspondente), garantindo reutilização de código e alinhamento consistente.
+- **`MainActivity`**: Activity principal do aplicativo responsável por inicializar o conteúdo com o tema da aplicação (`CalculadoraIMCTheme`) e definir a interface base do app.
+- **`TipTimeLayout`**: Composable principal da tela. Organiza o layout em uma `Column` contendo os campos de entrada para peso e altura, opção para arredondamento do resultado, botão de cálculo e exibição do valor do IMC.
+- **`EditNumberField`**: Composable reutilizável para renderizar campos de entrada de dados (`TextField`) customizados para valores numéricos, permitindo definir o rótulo (`label`) e as opções de teclado (`KeyboardOptions`).
+- **`RoundTheTipRow`**: Composable responsável por exibir a opção de arredondamento do resultado, contendo o texto informativo e um componente `Switch`.
+- **`ExibirImc`**: Composable responsável por apresentar o valor final do IMC e a classificação/faixa de peso correspondente.
 
 ---
 
@@ -48,24 +50,24 @@ O aplicativo calcula o Índice de Massa Corporal (IMC) a partir de dados digitad
 
 ```text
 MainActivity
-└── LPDMavaliacao1Theme
-    └── Scaffold
-        └── CardPerfil (Box)
-            ├── Column (Alinhado ao Topo)
-            │   ├── Image (Logotipo / Imagem superior)
-            │   └── Text ("cartão pessoal profissional")
-            │
-            └── Column (Centralizado na tela)
-                ├── Image (Foto de perfil circular com borda)
-                ├── Text (Frase de impacto/saudação em destaque)
-                ├── Text (Nome completo)
-                ├── Text (Cargo / Título profissional)
-                ├── Text ("Sobre mim:")
-                ├── Text (Descrição/resumo profissional com borda)
-                └── Column (Lista de Contatos)
-                    ├── ItemContato (E-mail - Icons.Default.Email)
-                    ├── ItemContato (Telefone - Icons.Default.Phone)
-                    └── ItemContato (Rede Social / Web - Icons.Default.Share)
+└── CalculadoraIMCTheme
+    └── TipTimeLayout (Column)
+        ├── Text ("Calcular IMC")
+        ├── EditNumberField (Peso - kg)
+        │   └── TextField
+        ├── EditNumberField (Altura - m)
+        │   └── TextField
+        ├── RoundTheTipRow
+        │   └── Row
+        │       ├── Text ("Arredondar resultado")
+        │       └── Switch
+        ├── Button ("Calcular")
+        │   └── Text ("Calcular")
+        └── Text ("IMC: ...")
+
+ExibirImc (Column)
+├── Text ("IMC: ...")
+└── Text ("Classificação: ...")
 ```
 
 ---
