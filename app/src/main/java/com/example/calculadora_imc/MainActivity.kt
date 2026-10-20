@@ -154,7 +154,7 @@ fun ExibirImc(imc: Double) {
             modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
         )
         Text(
-            text = "Classificação: ${FaixaIMC(imc)}",
+            text = "Classificação: ${$FaixaIMC(imc)}",
             fontSize = 29.sp,
             modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
         )
