@@ -138,6 +138,31 @@ fun RoundTheTipRow(
     }
 }
 
+@Composable
+fun ExibirImc(imc: Double) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .padding(40.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "IMC: $imc",
+            fontSize = 29.sp,
+            modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
+        )
+        Text(
+            text = "Classificação: ${FaixaIMC(imc)}",
+            fontSize = 29.sp,
+            modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
+        )
+}
+    fun FaixaIMC(n: Double):String = when(n) {
+        <18.5 -> "Abaixo do peso"; >18.5 && <24.9 -> "Peso normal"; >25.0 && <29.9 -> "Sobrepeso"; >30.0 -> "Obesidade"; else->"?"
+    }
+
 fun calcularImc(
     pesoKg: Double,
     alturaM: Double,
