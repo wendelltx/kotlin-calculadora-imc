@@ -7,13 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,13 +25,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.calculadora_imc.ui.theme.CalculadoraIMCTheme
-import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.ceil
 
@@ -41,20 +42,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             CalculadoraIMCTheme {
                 TipTimeLayout()
-                }
             }
         }
     }
+}
 
 @Composable
 fun TipTimeLayout() {
     var pesoInput by remember { mutableStateOf("") }
     var alturaInput by remember { mutableStateOf("") }
     var arredondarResultado by remember { mutableStateOf(false) }
-    var gorjeta by remember { mutableStateOf(calcularImc(0.0, 0.0, false)) }
+    var imcResultado by remember { mutableStateOf("") }
 
-    val pesoKg = pesoInput.toDoubleOrNull() ?: 0.0
-    val alturaM = alturaInput.toDoubleOrNull() ?: 0.0
+    val pesoKg = pesoInput.replace(",", ".").toDoubleOrNull() ?: 0.0
+    val alturaM = alturaInput.replace(",", ".").toDoubleOrNull() ?: 0.0
 
     Column(
         modifier = Modifier
@@ -67,7 +68,9 @@ fun TipTimeLayout() {
         Text(
             text = "Calcular IMC",
             fontSize = 29.sp,
-            modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .align(Alignment.Start)
         )
         EditNumberField(
             label = "Peso (kg)",
@@ -77,7 +80,9 @@ fun TipTimeLayout() {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
             ),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
         )
         EditNumberField(
             label = "Altura (m)",
@@ -87,7 +92,9 @@ fun TipTimeLayout() {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
         )
         RoundTheTipRow(
             arredondar = arredondarResultado,
@@ -96,11 +103,18 @@ fun TipTimeLayout() {
         )
         Button(
             onClick = {
-                imc = calcularImc(pesoKg,alturaInput, arredondarResultado)
+                imcResultado = calcularImc(pesoKg, alturaM, arredondarResultado)
             },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
-        ) { Text("Calcular") }
-        Text(text = "IMC: $imc", fontSize = 20.sp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            Text("Calcular")
+        }
+        if (imcResultado.isNotEmpty()) {
+            val imcVal = imcResultado.replace(",", ".").toDoubleOrNull() ?: 0.0
+            ExibirImc(imc = imcVal)
+        }
     }
 }
 
@@ -139,37 +153,42 @@ fun RoundTheTipRow(
 }
 
 @Composable
-fun ExibirImc(imc: Double) {
+fun ExibirImc(imc: Double, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding()
-            .padding(40.dp),
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "IMC: $imc",
-            fontSize = 29.sp,
-            modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
+            text = "IMC: ${String.format(Locale.forLanguageTag("pt-BR"), "%.2f", imc)}",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
         )
+        Spacer(modifier = Modifier.height(3.dp))
         Text(
-            text = "Classificação: ${$FaixaIMC(imc)}",
-            fontSize = 29.sp,
-            modifier = Modifier.padding(bottom = 16.dp).align(Alignment.Start)
+            text = "Classificação: ${faixaIMC(imc)}",
+            fontSize = 20.sp
         )
-}
-    fun FaixaIMC(n: Double):String = when(n) {
-        n<18.5 -> "Abaixo do peso"; n>18.5 && <24.9 -> "Peso normal"; n>25.0 && <29.9 -> "Sobrepeso"; n>30.0 -> "Obesidade"; else->"?"
     }
+}
+
+fun faixaIMC(n: Double): String = when {
+    n <= 0.0 -> "-"
+    n < 18.5 -> "Abaixo do peso"
+    n < 25.0 -> "Peso normal"
+    n < 30.0 -> "Sobrepeso"
+    else -> "Obesidade"
+}
 
 fun calcularImc(
     pesoKg: Double,
     alturaM: Double,
     arredondar: Boolean
 ): String {
-    var imc = (pesoKg / alturaM * alturaM)
+    if (alturaM <= 0.0 || pesoKg <= 0.0) return "0,00"
+    var imc = pesoKg / (alturaM * alturaM)
     if (arredondar) imc = ceil(imc)
-    return NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(imc)
+    return String.format(Locale.forLanguageTag("pt-BR"), "%.2f", imc)
 }
 
